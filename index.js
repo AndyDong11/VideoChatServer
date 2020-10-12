@@ -18,8 +18,24 @@ let server = app.listen(PORT, () => {
 
 let io = require('socket.io')(server)
 io.on('connection', socket => {
+
     socket.on('message', data => {
-        io.emit('newmessage', data)
+        socket.broadcast.emit('newmessage', data)
+    })
+
+    socket.on('offer', data => {
+        console.log('sending offer')
+        socket.broadcast.emit('offer', { offer: data })
+    })
+
+    socket.on('answer', data => {
+        console.log('sending asnwer')
+        socket.broadcast.emit('answer', { answer: data })
+    })
+
+    socket.on('new-ice-candidate', data => {
+        console.log('sending ice candidate')
+        socket.broadcast.emit('ice-candidate', { iceCandidate: data })
     })
 })
 
